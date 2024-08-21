@@ -7,42 +7,57 @@ import (
 )
 
 type TaskStatus struct {
-	Label   string
-	Name    string
-	ColorFg HexColor
-	ColorBg HexColor
+	Label            string
+	Name             string
+	ColorFg          HexColor
+	ColorBg          HexColor
+	BeforeStatusName *string
 }
 
 var TaskStatusPending = TaskStatus{
-	Label: "保留中",
-	Name:  "PENDING",
+	Label:            "保留中",
+	Name:             "PENDING",
+	ColorFg:          "#ffffff",
+	ColorBg:          "#000000",
+	BeforeStatusName: &TaskStatusTodo.Name,
 }
 
 var TaskStatusTodo = TaskStatus{
-	Label: "未着手",
-	Name:  "TODO",
+	Label:            "未着手",
+	Name:             "TODO",
+	ColorFg:          "#ffffff",
+	ColorBg:          "#000000",
+	BeforeStatusName: nil,
 }
 
-var TaskStatusProcessing = TaskStatus{
-	Label: "進行中",
-	Name:  "PROCESSING",
+var TaskStatusProgress = TaskStatus{
+	Label:            "進行中",
+	Name:             "PROGRESS",
+	ColorFg:          "#ffffff",
+	ColorBg:          "#000000",
+	BeforeStatusName: &TaskStatusTodo.Name,
 }
 
 var TaskStatusComplete = TaskStatus{
-	Label: "完了",
-	Name:  "COMPLETE",
+	Label:            "完了",
+	Name:             "COMPLETE",
+	ColorFg:          "#ffffff",
+	ColorBg:          "#000000",
+	BeforeStatusName: &TaskStatusProgress.Name,
 }
 
 var TASK_STATUSES = []TaskStatus{
 	TaskStatusPending,
 	TaskStatusTodo,
-	TaskStatusProcessing,
+	TaskStatusProgress,
 	TaskStatusComplete,
 }
 
 var taskStatusMap = lo.KeyBy(TASK_STATUSES, func(t TaskStatus) string {
 	return t.Label
 })
+
+var TaskStatusDefault = TaskStatusTodo
 
 func (t TaskStatus) Value() (driver.Value, error) {
 	return t.Name, nil
