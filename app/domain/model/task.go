@@ -36,13 +36,20 @@ func NewTask(title string, content string, statusName *string) (Task, error) {
 		taskStatus = t
 	}
 
-	now := time.Now()
-
 	return Task{
-		Title:     title,
-		Content:   content,
-		Status:    taskStatus,
-		CreatedAt: now,
-		UpdatedAt: now,
+		Title:   title,
+		Content: content,
+		Status:  taskStatus,
 	}, nil
+}
+
+func (t Task) StartTask() (Task, error) {
+	if t.Status.Name != *TaskStatusProgress.BeforeStatusName {
+		return Task{}, errors.New("Cannot start except Todo status.")
+	}
+
+	startedTask := t
+	startedTask.Status = TaskStatusProgress
+
+	return startedTask, nil
 }
