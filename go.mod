@@ -3,6 +3,7 @@ module github.com/umaidashi/go-cli-cobra
 go 1.21.5
 
 require (
+	github.com/mattn/go-sqlite3 v1.14.22
 	github.com/samber/lo v1.47.0
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/viper v1.19.0
