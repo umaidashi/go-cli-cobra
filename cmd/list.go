@@ -1,0 +1,43 @@
+package cmd
+
+import (
+	"fmt"
+
+	_ "github.com/mattn/go-sqlite3"
+	"github.com/spf13/cobra"
+	"github.com/umaidashi/go-cli-cobra/app/infrastructure/dao"
+	"github.com/umaidashi/go-cli-cobra/app/usecase"
+)
+
+// listCmd represents the list command
+var listCmd = &cobra.Command{
+	Use:   "list",
+	Short: "A brief description of your command",
+	Long: `A longer description that spans multiple lines and likely contains examples
+and usage of using your command. For example:
+
+Cobra is a CLI library for Go that empowers applications.
+This application is a tool to generate the needed files
+to quickly create a Cobra application.`,
+	Run: func(cmd *cobra.Command, args []string) {
+		// db, err := sql.Open("sqlite3", "./todolist.sqlite3")
+		// cobra.CheckErr(err)
+		// defer db.Close()
+
+		// taskRepository := dao.NewTaskDao(db)
+		taskMock := dao.NewTaskDaoMock()
+		taskUsecase, err := usecase.NewTaskUsecase(taskMock)
+		cobra.CheckErr(err)
+
+		tasks, err := taskUsecase.List()
+		cobra.CheckErr(err)
+
+		for _, task := range tasks {
+			fmt.Println(task.Id, task.Title, task.Status.Name)
+		}
+	},
+}
+
+func init() {
+	rootCmd.AddCommand(listCmd)
+}
