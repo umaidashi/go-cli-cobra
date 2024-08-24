@@ -49,4 +49,5 @@ brews:
   - repository:
       owner: umaidashi
       name: homebrew-tap
+      branch: main
       token: "{{ .Env.TAP_GITHUB_TOKEN }}"
