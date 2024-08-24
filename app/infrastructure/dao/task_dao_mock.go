@@ -38,6 +38,10 @@ func (d *TaskDaoMock) List() ([]model.Task, error) {
 	}, nil
 }
 
+func (d *TaskDaoMock) Statuses() ([]model.TaskStatus, error) {
+	return model.TASK_STATUSES, nil
+}
+
 func (d *TaskDaoMock) Search(condition model.TaskSearchCondition) ([]model.Task, error) {
 	return []model.Task{
 		{

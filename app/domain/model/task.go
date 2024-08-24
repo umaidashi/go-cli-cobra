@@ -36,10 +36,13 @@ func NewTask(title string, content string, statusName *string) (Task, error) {
 		taskStatus = t
 	}
 
+	now := time.Now()
+
 	return Task{
-		Title:   title,
-		Content: &content,
-		Status:  taskStatus,
+		Title:     title,
+		Content:   &content,
+		Status:    taskStatus,
+		CreatedAt: now,
 	}, nil
 }
 

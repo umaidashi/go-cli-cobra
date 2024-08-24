@@ -32,6 +32,10 @@ func (d *TaskDao) List() ([]model.Task, error) {
 	return taskJSON.Tasks, nil
 }
 
+func (d *TaskDao) Statuses() ([]model.TaskStatus, error) {
+	return model.TASK_STATUSES, nil
+}
+
 func (d *TaskDao) Search(condition model.TaskSearchCondition) ([]model.Task, error) {
 	return []model.Task{}, nil
 }
