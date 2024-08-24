@@ -5,6 +5,7 @@ import (
 	"io"
 	"os"
 
+	"github.com/samber/lo"
 	"github.com/umaidashi/go-cli-cobra/app/domain/model"
 	"github.com/umaidashi/go-cli-cobra/app/domain/repository"
 )
@@ -15,6 +16,16 @@ type TaskDao struct {
 
 type TaskJSON struct {
 	Tasks []model.Task `json:"tasks"`
+}
+
+func (j TaskJSON) getMaxTaskId() int {
+	taskIds := lo.Map(j.Tasks, func(t model.Task, _ int) int {
+		return t.Id
+	})
+	maxId := lo.MaxBy(taskIds, func(id int, max int) bool {
+		return id > max
+	})
+	return maxId
 }
 
 func NewTaskDao(file *os.File) repository.TaskRepository {
@@ -43,12 +54,14 @@ func (d *TaskDao) Search(condition model.TaskSearchCondition) ([]model.Task, err
 
 func (d *TaskDao) Create(task model.Task) (model.Task, error) {
 	taskJSON, err := d.getTaskJSON()
+
+	task.Id = taskJSON.getMaxTaskId() + 1
+
 	taskJSON.Tasks = append(taskJSON.Tasks, task)
 	json, err := json.Marshal(taskJSON)
 	if err != nil {
 		return model.Task{}, err
 	}
-
 	err = d.truncateAndWrite(json)
 	if err != nil {
 		return model.Task{}, err
