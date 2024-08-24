@@ -62,6 +62,10 @@ func (t *TaskStatus) UnmarshalJSON(data []byte) error {
 	return nil
 }
 
+func (t TaskStatus) MarshalJSON() ([]byte, error) {
+	return json.Marshal(t.Name)
+}
+
 var taskStatusMap = lo.KeyBy(TASK_STATUSES, func(t TaskStatus) string {
 	return t.Name
 })

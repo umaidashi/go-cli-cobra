@@ -16,10 +16,11 @@ var listCmd = &cobra.Command{
 	Short: "list of tasks.",
 	Long:  `display list of tasks.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		buf, err := os.ReadFile("/tmp/tasks.json")
+		file, err := os.OpenFile("/tmp/tasks.json", os.O_RDONLY, 0666)
 		cobra.CheckErr(err)
+		defer file.Close()
 
-		taskRepository := dao.NewTaskDao(buf)
+		taskRepository := dao.NewTaskDao(file)
 		taskUsecase, err := usecase.NewTaskUsecase(taskRepository)
 		cobra.CheckErr(err)
 
