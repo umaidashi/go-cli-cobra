@@ -55,13 +55,9 @@ changelog:
 brews:
   -
     name: go_cobra_cli_task
-    alternative_names:
-      - myproject@{{ .Version }}
-      - myproject@{{ .Major }}
     ids:
       - foo
       - bar
-    app: MyApp.app
     goarm: 6
     goamd64: v1
     url_template: "https://github.mycompany.com/foo/bar/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
@@ -110,11 +106,9 @@ brews:
       name: homebrew-tap
       branch: main
       token: "{{ .Env.TAP_GITHUB_TOKEN }}"
-      token_type: "github"
       pull_request:
         enabled: true
         draft: true
-        check_boxes: true
         base:
           owner: goreleaser
           name: homebrew-tap
