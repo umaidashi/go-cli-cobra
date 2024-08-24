@@ -1,18 +1,23 @@
 package dao
 
 import (
-	"database/sql"
+	"encoding/json"
+	"fmt"
 
 	"github.com/umaidashi/go-cli-cobra/app/domain/model"
 	"github.com/umaidashi/go-cli-cobra/app/domain/repository"
 )
 
 type TaskDao struct {
-	db *sql.DB
+	buf []byte
 }
 
-func NewTaskDao(db *sql.DB) repository.TaskRepository {
-	return &TaskDao{db}
+type TaskJSON struct {
+	Tasks []model.Task `json:"tasks"`
+}
+
+func NewTaskDao(buf []byte) repository.TaskRepository {
+	return &TaskDao{buf}
 }
 
 func (d *TaskDao) One(id int) (model.Task, error) {
@@ -20,7 +25,13 @@ func (d *TaskDao) One(id int) (model.Task, error) {
 }
 
 func (d *TaskDao) List() ([]model.Task, error) {
-	return []model.Task{}, nil
+	var taskJSON TaskJSON
+	err := json.Unmarshal(d.buf, &taskJSON)
+	if err != nil {
+		return []model.Task{}, err
+	}
+	fmt.Println(taskJSON)
+	return taskJSON.Tasks, nil
 }
 
 func (d *TaskDao) Search(condition model.TaskSearchCondition) ([]model.Task, error) {

@@ -6,13 +6,13 @@ import (
 )
 
 type Task struct {
-	Id          int
-	Title       string
-	Content     string
-	Status      TaskStatus
-	CreatedAt   time.Time
-	UpdatedAt   time.Time
-	CompletedAt time.Time
+	Id          int        `json:"id"`
+	Title       string     `json:"title"`
+	Content     *string    `json:"content"`
+	Status      TaskStatus `json:"status"`
+	CreatedAt   time.Time  `json:"created_at"`
+	UpdatedAt   time.Time  `json:"updated_at"`
+	CompletedAt *time.Time `json:"completed_at"`
 }
 
 type TaskSearchCondition struct {
@@ -38,7 +38,7 @@ func NewTask(title string, content string, statusName *string) (Task, error) {
 
 	return Task{
 		Title:   title,
-		Content: content,
+		Content: &content,
 		Status:  taskStatus,
 	}, nil
 }

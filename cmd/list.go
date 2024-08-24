@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"fmt"
+	"os"
 
 	_ "github.com/mattn/go-sqlite3"
 	"github.com/spf13/cobra"
@@ -20,13 +21,11 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		// db, err := sql.Open("sqlite3", "./todolist.sqlite3")
-		// cobra.CheckErr(err)
-		// defer db.Close()
+		buf, err := os.ReadFile("/tmp/tasks.json")
+		cobra.CheckErr(err)
 
-		// taskRepository := dao.NewTaskDao(db)
-		taskMock := dao.NewTaskDaoMock()
-		taskUsecase, err := usecase.NewTaskUsecase(taskMock)
+		taskRepository := dao.NewTaskDao(buf)
+		taskUsecase, err := usecase.NewTaskUsecase(taskRepository)
 		cobra.CheckErr(err)
 
 		tasks, err := taskUsecase.List()

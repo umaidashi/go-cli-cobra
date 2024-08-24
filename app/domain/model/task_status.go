@@ -1,7 +1,7 @@
 package model
 
 import (
-	"database/sql/driver"
+	"encoding/json"
 
 	"github.com/samber/lo"
 )
@@ -53,20 +53,20 @@ var TASK_STATUSES = []TaskStatus{
 	TaskStatusComplete,
 }
 
+func (t *TaskStatus) UnmarshalJSON(data []byte) error {
+	var name string
+	if err := json.Unmarshal(data, &name); err != nil {
+		return err
+	}
+	*t = TaskStatusOf(name)
+	return nil
+}
+
 var taskStatusMap = lo.KeyBy(TASK_STATUSES, func(t TaskStatus) string {
-	return t.Label
+	return t.Name
 })
 
 var TaskStatusDefault = TaskStatusTodo
-
-func (t TaskStatus) Value() (driver.Value, error) {
-	return t.Name, nil
-}
-
-func (t *TaskStatus) Scan(input interface{}) error {
-	*t = TaskStatusOf(input.(string))
-	return nil
-}
 
 func TaskStatusOf(name string) TaskStatus {
 	v, ok := taskStatusMap[name]
