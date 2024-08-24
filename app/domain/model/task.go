@@ -53,6 +53,19 @@ func (t Task) StartTask() (Task, error) {
 
 	startedTask := t
 	startedTask.Status = TaskStatusProgress
+	startedTask.UpdatedAt = time.Now()
 
 	return startedTask, nil
+}
+
+func (t Task) DoneTask() (Task, error) {
+	if t.Status.Name != *TaskStatusComplete.BeforeStatusName {
+		return Task{}, errors.New("Cannot done except Progress status.")
+	}
+
+	doneTask := t
+	doneTask.Status = TaskStatusComplete
+	doneTask.CompletedAt = &time.Time{}
+
+	return doneTask, nil
 }

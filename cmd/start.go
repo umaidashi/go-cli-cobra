@@ -1,14 +1,11 @@
-/*
-Copyright © 2024 NAME HERE <EMAIL ADDRESS>
-*/
 package cmd
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/spf13/cobra"
 	"github.com/umaidashi/go-cli-cobra/app/infrastructure/dao"
+	"github.com/umaidashi/go-cli-cobra/app/infrastructure/json"
 	"github.com/umaidashi/go-cli-cobra/app/usecase"
 )
 
@@ -18,11 +15,11 @@ var startCmd = &cobra.Command{
 	Short: "start task",
 	Long:  `start task`,
 	Run: func(cmd *cobra.Command, args []string) {
-		file, err := os.OpenFile("/tmp/tasks.json", os.O_RDWR, 0666)
+		json, err := json.NewJSON()
 		cobra.CheckErr(err)
-		defer file.Close()
+		defer json.Close()
 
-		taskRepository := dao.NewTaskDao(file)
+		taskRepository := dao.NewTaskDao(json)
 		taskUsecase, err := usecase.NewTaskUsecase(taskRepository)
 		cobra.CheckErr(err)
 
@@ -39,4 +36,5 @@ func init() {
 	rootCmd.AddCommand(startCmd)
 
 	startCmd.Flags().IntVarP(&id, "id", "i", 0, "Help message for toggle")
+	startCmd.MarkFlagRequired("id")
 }

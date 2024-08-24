@@ -66,3 +66,20 @@ func (u TaskUsecase) StartTask(id int) (model.Task, error) {
 
 	return updatedTask, nil
 }
+
+func (u TaskUsecase) DoneTask(id int) (model.Task, error) {
+	task, err := u.repository.One(id)
+	if err != nil {
+		return model.Task{}, err
+	}
+	doneTask, err := task.DoneTask()
+	if err != nil {
+		return model.Task{}, err
+	}
+	updatedTask, err := u.repository.Update(doneTask)
+	if err != nil {
+		return model.Task{}, err
+	}
+
+	return updatedTask, nil
+}
