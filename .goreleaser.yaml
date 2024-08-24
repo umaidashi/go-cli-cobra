@@ -45,61 +45,8 @@ changelog:
       - "^docs:"
       - "^test:"
 
-# brews:
-#   - repository:
-#       owner: umaidashi
-#       name: homebrew-tap
-#       token: "{{ .Env.TAP_GITHUB_TOKEN }}"
-#
-# .goreleaser.yaml
 brews:
-  -
-    name: go_cobra_cli_task
-    goarm: 6
-    goamd64: v1
-    url_template: "https://github.mycompany.com/foo/bar/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
-    url_headers:
-      - "Accept: application/octet-stream"
-      - 'Authorization: bearer #{ENV["HOMEBREW_GITHUB_API_TOKEN"]}'
-    download_strategy: CurlDownloadStrategy
-    custom_require: custom_download_strategy
-    commit_author:
-      name: goreleaserbot
-      email: bot@goreleaser.com
-    commit_msg_template: "Brew formula update for {{ .ProjectName }} version {{ .Tag }}"
-    directory: Formula
-    caveats: "How to use this binary"
-    homepage: "https://example.com/"
-    description: "Software to create fast and easy drum rolls."
-    license: "MIT"
-    skip_upload: true
-    custom_block: |
-      head "https://github.com/some/package.git"
-    dependencies:
-      - name: git
-        os: mac
-      - name: zsh
-        type: optional
-      - name: fish
-        version: v1.2.3
-      - name: elvish
-        type: optional
-        version: v1.2.3
-    conflicts:
-      - svn
-      - bash
-    test: |
-      system "#{bin}/foo --version"
-    install: |
-      bin.install "some_other_name"
-      bash_completion.install "completions/foo.bash" => "foo"
-    extra_install: |
-      bash_completion.install "completions/foo.bash" => "foo"
-      man1.install "man/foo.1.gz"
-    post_install: |
-        etc.install "app-config.conf"
-    repository:
+  - repository:
       owner: umaidashi
       name: homebrew-tap
-      branch: main
       token: "{{ .Env.TAP_GITHUB_TOKEN }}"
