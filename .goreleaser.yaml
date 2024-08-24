@@ -103,14 +103,3 @@ brews:
       name: homebrew-tap
       branch: main
       token: "{{ .Env.TAP_GITHUB_TOKEN }}"
-      pull_request:
-        enabled: true
-        draft: true
-        base:
-          owner: goreleaser
-          name: homebrew-tap
-          branch: main
-      git:
-        url: 'ssh://git@myserver.com:repo.git'
-        private_key: '{{ .Env.PRIVATE_KEY_PATH }}'
-        ssh_command: 'ssh -i {{ .Env.KEY }} -o SomeOption=yes'
