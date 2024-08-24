@@ -55,9 +55,6 @@ changelog:
 brews:
   -
     name: go_cobra_cli_task
-    ids:
-      - foo
-      - bar
     goarm: 6
     goamd64: v1
     url_template: "https://github.mycompany.com/foo/bar/releases/download/{{ .Tag }}/{{ .ArtifactName }}"
