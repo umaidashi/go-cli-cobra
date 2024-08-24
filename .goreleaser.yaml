@@ -45,9 +45,15 @@ changelog:
       - "^docs:"
       - "^test:"
 
+brews:
+  - repository:
+      owner: umaidashi
+      name: homebrew-tap
+      token: "{{ .Env.TAP_GITHUB_TOKEN }}"
+
 # .goreleaser.yaml
 brews:
-    name: go-cobra-cli-task
+    name: go_cobra_cli_task
     alternative_names:
       - myproject@{{ .Version }}
       - myproject@{{ .Major }}
