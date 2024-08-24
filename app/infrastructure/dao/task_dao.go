@@ -2,7 +2,6 @@ package dao
 
 import (
 	"encoding/json"
-	"fmt"
 
 	"github.com/umaidashi/go-cli-cobra/app/domain/model"
 	"github.com/umaidashi/go-cli-cobra/app/domain/repository"
@@ -30,7 +29,6 @@ func (d *TaskDao) List() ([]model.Task, error) {
 	if err != nil {
 		return []model.Task{}, err
 	}
-	fmt.Println(taskJSON)
 	return taskJSON.Tasks, nil
 }
 
