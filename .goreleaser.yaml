@@ -53,6 +53,7 @@ changelog:
 #
 # .goreleaser.yaml
 brews:
+  -
     name: go_cobra_cli_task
     alternative_names:
       - myproject@{{ .Version }}
