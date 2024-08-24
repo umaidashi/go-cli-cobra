@@ -17,6 +17,7 @@ var listCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		json, err := json.NewJSON()
 		cobra.CheckErr(err)
+		defer json.Close()
 
 		taskRepository := dao.NewTaskDao(json)
 		taskUsecase, err := usecase.NewTaskUsecase(taskRepository)
