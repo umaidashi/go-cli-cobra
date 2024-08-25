@@ -46,7 +46,7 @@ changelog:
       - "^test:"
 
 brews:
-  - tap:
+  - repository:
       owner: umaidashi
       name: homebrew-tap
       token: "{{ .Env.TAP_GITHUB_TOKEN }}"
