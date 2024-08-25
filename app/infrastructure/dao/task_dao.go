@@ -1,7 +1,6 @@
 package dao
 
 import (
-	"encoding/json"
 	"errors"
 
 	myJson "github.com/umaidashi/go-cli-cobra/app/infrastructure/json"
@@ -45,11 +44,7 @@ func (d *TaskDao) Create(task model.Task) (model.Task, error) {
 	task.Id = d.json.GetMaxTaskId() + 1
 
 	d.json.Tasks = append(d.json.Tasks, task)
-	json, err := json.Marshal(d.json)
-	if err != nil {
-		return model.Task{}, err
-	}
-	err = d.json.Write(json)
+	err := d.json.Write()
 	if err != nil {
 		return model.Task{}, err
 	}
@@ -78,11 +73,7 @@ func (d *TaskDao) Update(task model.Task) (model.Task, error) {
 		return t
 	})
 
-	json, err := json.Marshal(d.json)
-	if err != nil {
-		return model.Task{}, err
-	}
-	err = d.json.Write(json)
+	err := d.json.Write()
 	if err != nil {
 		return model.Task{}, err
 	}

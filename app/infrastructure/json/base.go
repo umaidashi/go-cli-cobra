@@ -44,8 +44,12 @@ func (j JSON) GetMaxTaskId() int {
 	return maxId
 }
 
-func (j JSON) Write(buf []byte) error {
-	err := j.file.Truncate(0)
+func (j JSON) Write() error {
+	json, err := goJson.Marshal(j)
+	if err != nil {
+		return err
+	}
+	err = j.file.Truncate(0)
 	if err != nil {
 		return err
 	}
@@ -53,7 +57,7 @@ func (j JSON) Write(buf []byte) error {
 	if err != nil {
 		return err
 	}
-	_, err = j.file.Write(buf)
+	_, err = j.file.Write(json)
 	if err != nil {
 		return err
 	}

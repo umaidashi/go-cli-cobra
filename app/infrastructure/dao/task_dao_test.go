@@ -4,17 +4,16 @@ import (
 	"fmt"
 	"testing"
 
-	goJson "encoding/json"
-
+	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/suite"
 	"github.com/umaidashi/go-cli-cobra/app/domain/model"
 	"github.com/umaidashi/go-cli-cobra/app/domain/repository"
 	"github.com/umaidashi/go-cli-cobra/app/infrastructure/json"
+	strings "github.com/umaidashi/go-cli-cobra/app/utils"
 )
 
 type TaskDaoSuite struct {
 	suite.Suite
-	json       json.JSON
 	repository repository.TaskRepository
 }
 
@@ -26,58 +25,60 @@ func (s *TaskDaoSuite) SetupTest() {
 }
 
 func (s *TaskDaoSuite) BeforeTest(suiteName, testName string) {
-	before, _ := json.NewJSON()
-	task, _ := model.NewTask("task1", "content1", &model.TaskStatusTodo.Name)
-	emptyTask := json.JSON{Tasks: []model.Task{task}}
-	emptyTaskJSON, _ := goJson.Marshal(emptyTask)
-	before.Write(emptyTaskJSON)
-	s.json, _ = json.NewJSON()
-	fmt.Println(s.json)
-	s.repository = NewTaskDao(s.json)
+	j, _ := json.NewJSON()
+	taskJson := json.JSON{Tasks: []model.Task{
+		{Id: 1, Title: "task1", Content: strings.EmptyToNil("content1"), Status: model.TaskStatusTodo},
+	}}
+	j.Tasks = taskJson.Tasks
+	fmt.Printf("j: %v\n", j)
+	s.repository = NewTaskDao(j)
 }
 
 func (s *TaskDaoSuite) AfterTest(suiteName, testName string) {
-	s.json.Close()
 }
 
 func (s *TaskDaoSuite) TestOne() {
 	task, err := s.repository.One(1)
-	s.NoError(err)
-	s.Equal(1, task.Id)
-	s.Equal("task1", task.Title)
-	s.Equal("TODO", task.Status.Name)
+	assert.Nil(s.T(), err)
+	assert.Equal(s.T(), 1, task.Id)
+	assert.Equal(s.T(), "task1", task.Title)
+	assert.Equal(s.T(), "content1", *task.Content)
+	assert.Equal(s.T(), "TODO", task.Status.Name)
 }
 
 func (s *TaskDaoSuite) TestList() {
 	tasks, err := s.repository.List()
-	s.NoError(err)
-	s.Len(tasks, 1)
-	s.Equal(1, tasks[0].Id)
-	s.Equal("task1", tasks[0].Title)
-	s.Equal("TODO", tasks[0].Status.Name)
+	assert.Nil(s.T(), err)
+	assert.Len(s.T(), tasks, 1)
+	assert.Equal(s.T(), 1, tasks[0].Id)
+	assert.Equal(s.T(), "task1", tasks[0].Title)
+	assert.Equal(s.T(), "content1", *tasks[0].Content)
+	assert.Equal(s.T(), "TODO", tasks[0].Status.Name)
 }
 
 func (s *TaskDaoSuite) TestStatuses() {
 	statuses, err := s.repository.Statuses()
-	s.NoError(err)
-	s.Len(statuses, len(model.TASK_STATUSES))
+	assert.Nil(s.T(), err)
+	assert.Len(s.T(), statuses, len(model.TASK_STATUSES))
 }
 
 func (s *TaskDaoSuite) TestCreate() {
 	newTask, _ := model.NewTask("task2", "content2", &model.TaskStatusTodo.Name)
 	task, err := s.repository.Create(newTask)
-	s.NoError(err)
-	s.Equal(2, task.Id)
-	s.Equal("task2", task.Title)
-	s.Equal(model.TaskStatusTodo, task.Status)
+	assert.Nil(s.T(), err)
+	assert.Equal(s.T(), 2, task.Id)
+	assert.Equal(s.T(), "task2", task.Title)
+	assert.Equal(s.T(), "content2", *task.Content)
+	assert.Equal(s.T(), "TODO", task.Status.Name)
 }
 
 func (s *TaskDaoSuite) TestUpdate() {
 	task, _ := s.repository.One(1)
 	start, _ := task.StartTask()
 	updated, err := s.repository.Update(start)
-	s.NoError(err)
-	s.Equal(1, updated.Id)
-	s.Equal("task2", updated.Title)
-	s.Equal(model.TaskStatusProgress, updated.Status)
+	assert.Nil(s.T(), err)
+	assert.Equal(s.T(), 1, updated.Id)
+	assert.Equal(s.T(), "task1", updated.Title)
+	assert.Equal(s.T(), "content1", *updated.Content)
+	assert.Equal(s.T(), "PROGRESS", updated.Status.Name)
 }
