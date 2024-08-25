@@ -1,7 +1,6 @@
 package dao
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -30,7 +29,6 @@ func (s *TaskDaoSuite) BeforeTest(suiteName, testName string) {
 		{Id: 1, Title: "task1", Content: strings.EmptyToNil("content1"), Status: model.TaskStatusTodo},
 	}}
 	j.Tasks = taskJson.Tasks
-	fmt.Printf("j: %v\n", j)
 	s.repository = NewTaskDao(j)
 }
 
