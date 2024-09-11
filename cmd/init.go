@@ -22,6 +22,7 @@ var initCmd = &cobra.Command{
 
 		emptyTask := json.JSON{Tasks: []model.Task{}}
 		emptyTaskJSON, err := goJson.Marshal(emptyTask)
+		cobra.CheckErr(err)
 		file.Write(emptyTaskJSON)
 
 		fmt.Println("init task app")
